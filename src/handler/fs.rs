@@ -28,7 +28,6 @@ use crate::{
         media::{Media, Source},
         player::Player,
     },
-    ui::fs,
 };
 
 fn add_media_to_player(app: &mut App, once: bool) -> bool {
@@ -71,14 +70,14 @@ fn add_media_to_player(app: &mut App, once: bool) -> bool {
                 let msg = format!("Open failed: {}",entry.file_name().to_str().unwrap());
                 app.set_msg(&msg);
             } else {
-                let msg = format!("Start playing");
+                let msg = "Start playing".to_string();
                 app.set_msg(&msg);
             }
         }
-        return true;
+        true
     } else {
         fse.index.select(Some(0));
-        return false;
+        false
     }
 }
 

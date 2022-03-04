@@ -16,8 +16,8 @@
 // along with RustPlayer.  If not, see <http://www.gnu.org/licenses/>.
 
 use app::*;
-use handler::*;
-use media::*;
+
+
 use ui::*;
 
 mod app;

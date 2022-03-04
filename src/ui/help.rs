@@ -17,18 +17,18 @@
 
 use std::vec;
 
-use rand::Rng;
+
 use tui::{
     backend::Backend,
     Frame,
-    layout::{self, Alignment, Constraint, Direction, Layout, Rect},
-    style::{Color, Modifier, Style},
-    widgets::{BarChart, Block, Borders, BorderType, Paragraph, Row, Table},
+    layout::{Constraint, Direction, Layout, Rect},
+    style::{Color, Style},
+    widgets::{Block, Borders, BorderType, Paragraph, Row, Table},
 };
 
 use crate::{app::App, media::player::Player};
 
-pub fn draw_help<B>(app: &mut App, frame: &mut Frame<B>, area: Rect)
+pub fn draw_help<B>(_app: &mut App, frame: &mut Frame<B>, area: Rect)
 where
     B: Backend,
 {

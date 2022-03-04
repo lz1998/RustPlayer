@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with RustPlayer.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::cmp::max;
+
 
 use crossterm::event::KeyCode;
 
@@ -27,14 +27,14 @@ pub fn handle_player(app: &mut App, code: KeyCode) -> bool {
             let volume = app.player.volume() - 0.05;
             let new_volume = volume.max(0.0);
             app.player.set_volume(new_volume);
-            return true;
+            true
         }
         KeyCode::Char('=') => {
             let volume = app.player.volume() + 0.05;
             let new_volume = volume.min(1.0);
             app.player.set_volume(new_volume);
-            return true;
+            true
         }
-        _ => {return false;}
+        _ => {false}
     }
 }

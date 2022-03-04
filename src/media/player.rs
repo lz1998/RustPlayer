@@ -16,22 +16,17 @@
 // along with RustPlayer.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::{
-    cell::{Ref, RefCell},
-    fmt::Debug,
     fs::File,
-    io::{BufReader, Error},
+    io::{BufReader},
     ops::Add,
     path::Path,
-    ptr::null,
-    sync::{Arc, Mutex},
-    thread,
     time::{Duration, Instant},
 };
 
-use rodio::{Decoder, OutputStream, OutputStreamHandle, Sink, Source, Devices};
+use rodio::{Decoder, OutputStream, OutputStreamHandle, Sink, Source};
 use rodio::cpal;
 
-use crate::app;
+
 
 use super::media::Media;
 
@@ -137,21 +132,19 @@ impl Player for MusicPlayer {
                             }
                         },
                     }
-                } else {
-                    if let Ok(f) = File::open(path.as_str()) {
-                        let dec = Decoder::new(f);
-                        if let Ok(dec) = dec {
-                            if let Some(dur) = dec.total_duration() {
-                                duration = dur;
-                            } else {
-                                return false;
-                            }
+                } else if let Ok(f) = File::open(path.as_str()) {
+                    let dec = Decoder::new(f);
+                    if let Ok(dec) = dec {
+                        if let Some(dur) = dec.total_duration() {
+                            duration = dur;
                         } else {
                             return false;
                         }
                     } else {
                         return false;
                     }
+                } else {
+                    return false;
                 }
                 // open
                 match File::open(path.as_str()) {
@@ -169,7 +162,7 @@ impl Player for MusicPlayer {
                         }
                         self.play_list.lists.push(PlayListItem {
                             name: file_name,
-                            duration: duration,
+                            duration,
                             current_pos: Duration::from_secs(0),
                             status: PlayStatus::Waiting,
                             path: path.to_string_lossy().to_string(),
@@ -179,7 +172,7 @@ impl Player for MusicPlayer {
                         }
                         self.play();
                         self.tick();
-                        return true;
+                        true
                     }
                     Err(_) => false,
                 }
@@ -241,15 +234,15 @@ impl Player for MusicPlayer {
                 }
             }
         }
-        return true;
+        true
     }
 
     fn is_playing(&self) -> bool {
-        return self.initialized && !self._sink.is_paused() && !self.play_list.lists.is_empty();
+        self.initialized && !self._sink.is_paused() && !self.play_list.lists.is_empty()
     }
 
     fn get_progress(&self) -> (f32, f32) {
-        return (0.0, 0.0);
+        (0.0, 0.0)
     }
 
     fn tick(&mut self) {
@@ -263,19 +256,19 @@ impl Player for MusicPlayer {
                     }
                 }
                 PlayStatus::Playing(instant, duration) => {
-                    let now = instant.elapsed().add(duration.clone());
+                    let now = instant.elapsed().add(*duration);
                     if now.ge(&song.duration) {
                         // next song, delete 0
                         self.next();
                     } else {
                         // update status
                         self.current_time = now;
-                        self.total_time = song.duration.clone();
+                        self.total_time = song.duration;
                     }
                 }
                 PlayStatus::Stopped(dur) => {
-                    self.current_time = dur.clone();
-                    self.total_time = song.duration.clone();
+                    self.current_time = *dur;
+                    self.total_time = song.duration;
                 }
             }
         } else {
@@ -314,7 +307,7 @@ impl Player for MusicPlayer {
 
 impl MusicPlayer {
     pub fn volume(&self) -> f32 {
-        return self._sink.volume();
+        self._sink.volume()
     }
 
     pub fn set_volume(&mut self, new_volume: f32) -> bool {
@@ -323,7 +316,7 @@ impl MusicPlayer {
     }
 
     pub fn playing_song(&self) -> Option<&PlayListItem> {
-        return self.play_list.lists.first();
+        self.play_list.lists.first()
     }
 }
 

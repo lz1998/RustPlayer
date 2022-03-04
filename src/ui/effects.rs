@@ -21,7 +21,7 @@ use rand::Rng;
 use tui::{
     backend::Backend,
     Frame,
-    layout::{Alignment, Constraint, Direction, Layout, Rect},
+    layout::{Alignment, Rect},
     style::{Color, Modifier, Style},
     widgets::{BarChart, Block, Borders, BorderType},
 };

@@ -23,8 +23,8 @@ pub fn handle_help(app: &mut App, code: KeyCode) -> bool {
     match code {
         KeyCode::Enter => {
             open::that(app.config.home_page);
-            return true;
+            true
         }
-        _ => {return false;}
+        _ => {false}
     }
 }

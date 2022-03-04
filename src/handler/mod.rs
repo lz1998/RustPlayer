@@ -96,6 +96,6 @@ pub fn handle_keyboard_event(app: &mut App, key: KeyCode) {
     }
     flag = handle_routes(app, key);
     if flag {
-        return;
+        
     }
 }
